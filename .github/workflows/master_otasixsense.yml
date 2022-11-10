@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'otasixsense'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5583BAC12E92432487B084E305D16723 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1FC72EBBE19F49C38D80969887792526 }}
           package: .
