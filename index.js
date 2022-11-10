@@ -9,7 +9,7 @@ app.use(express.json())
 app.use(cors())
 
 let port = process.env.PORT || 4000
-let mongoConnectionString = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/product'
+let mongoConnectionString = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/product' || 'mongodb+srv://RohanSingh182003:Rohan2003@cluster0.uappo.mongodb.net/dashboard'
 
 app.listen(port,()=> console.log(`app is listening on port ${port}`))
 mongoose.connect(mongoConnectionString,()=> console.log('DB Connected!'))
