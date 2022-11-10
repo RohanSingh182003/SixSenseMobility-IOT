@@ -15,4 +15,4 @@ let mongoConnectionString = process.env.MONGO_URI || 'mongodb://sixsensemobility
 app.listen(port,()=> console.log(`app is listening on port ${port}`))
 mongoose.connect(mongoConnectionString,()=> console.log('DB Connected!'))
 
-app.use('/api/product',router)
+app.use('/',router)
