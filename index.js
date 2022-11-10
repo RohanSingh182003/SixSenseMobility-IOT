@@ -1,7 +1,8 @@
 const express = require('express')
 const app = express();
 const cors = require('cors');
-const { default: mongoose } = require( 'mongoose' );
+const mongoose = require( 'mongoose' );
+const router = require('./routes/productRoutes')
 
 // middlewares
 app.use(express.json())
@@ -13,6 +14,4 @@ let mongoConnectionString = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/
 app.listen(port,()=> console.log(`app is listening on port ${port}`))
 mongoose.connect(mongoConnectionString,()=> console.log('DB Connected!'))
 
-app.get('/',(req,res)=>{
-    res.send('Hello Working!')
-})
+app.use('/api/product',router)
