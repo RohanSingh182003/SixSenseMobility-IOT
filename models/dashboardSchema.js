@@ -11,7 +11,8 @@ const ProductSchema = new mongoose.Schema({
     },
     mac_address :{
         type: String,
-        require: true
+        require: true,
+        unique : true
     },
     function :{
         type: String,

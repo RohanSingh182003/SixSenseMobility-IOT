@@ -25,12 +25,27 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   let id = req.params.id;
   let member = await Products.find({ _id: id });
-  if (member.length > 0) {
+  if(member.length > 0){
     res.send(member);
-  } else {
+  }
+  else {
     res.status(404).json({ message: "no product found :(" });
   }
 });
+
+router.get("/mac_address/:mac_address", async (req,res)=>{
+  try {
+    let prod = await Products.find({mac_address : req.params.mac_address})
+    if (prod.length > 0) {
+      let version = prod[0].version
+      res.status(200).json({version})
+    } else {
+      res.status(404).json({message:"product not found :("})
+    }
+  } catch (error) {
+    res.send(error)
+  }
+})
 
 router.post("/", async (req, res) => {
   try {
