@@ -25,42 +25,52 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   let id = req.params.id;
   let member = await Products.find({ _id: id });
-  if(member.length > 0){
+  if (member.length > 0) {
     res.send(member);
-  }
-  else {
+  } else {
     res.status(404).json({ message: "no product found :(" });
   }
 });
 
-router.get("/mac_address/:mac_address", async (req,res)=>{
+// Get mac_adress and send the version of the corresponding product.
+router.get("/mac_address/:mac_address", async (req, res) => {
   try {
-    let prod = await Products.find({mac_address : req.params.mac_address})
+    let prod = await Products.find({ mac_address: req.params.mac_address });
     if (prod.length > 0) {
-      let version = prod[0].version
-      res.status(200).json({version})
+      let version = prod[0].version;
+      res.status(200).json({ version });
     } else {
-      res.status(404).json({message:"product not found :("})
+      res.status(404).json({ message: "product not found :(" });
     }
   } catch (error) {
-    res.send(error)
+    res.send(error);
   }
-})
+});
 
 router.post("/", async (req, res) => {
-  try {
-    const ins = new Products({
-      prod_name: req.body.prod_name,
-      ip_address: req.body.ip_address,
-      mac_address: req.body.mac_address,
-      function: req.body.function,
-      version: Number.parseFloat(req.body.version),
-      last_updated: req.body.last_updated,
+  let prod_mac_address = await Products.find({
+    mac_address: req.body.mac_address,
+  });
+  if (prod_mac_address.length > 0) {
+    res.status(500).json({
+      message:
+        "product already exists , enter a different product or mac address.",
     });
-    const response = await ins.save();
-    res.send(response);
-  } catch (error) {
-    res.send(error);
+  } else {
+    try {
+      const ins = new Products({
+        prod_name: req.body.prod_name,
+        ip_address: req.body.ip_address,
+        mac_address: req.body.mac_address,
+        function: req.body.function,
+        version: Number.parseFloat(req.body.version),
+        last_updated: req.body.last_updated,
+      });
+      const response = await ins.save();
+      res.send(response);
+    } catch (error) {
+      res.send(error);
+    }
   }
 });
 
