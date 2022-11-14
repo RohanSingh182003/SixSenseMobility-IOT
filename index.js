@@ -15,9 +15,13 @@ let mongoConnectionString = process.env.MONGO_URI || 'mongodb://sixsensemobility
 app.listen(port,()=> console.log(`app is listening on port ${port}`))
 mongoose.connect(mongoConnectionString,()=> console.log('DB Connected!'))
 
-app.use('/api/product',router)
+app.use('/api/products',router)
 
 // initial route
 app.get('/',(req,res)=>{
-    res.json({'greeting':'Welcome to SixSenseMobility. , visit /api/product to access apis.'})
+    res.json({'greeting':'Welcome to SixSenseMobility. , visit /api/products to access apis.'})
 })
+
+// serve the upload directpory as a static folder 
+const path = require('path')
+app.use('/static', express.static(path.join(__dirname, 'uploads')))
