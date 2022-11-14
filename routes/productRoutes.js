@@ -34,7 +34,7 @@ router.get("/mac_address/:mac_address", async (req, res) => {
         .status(200)
         .json({
           version,
-          file_path: `http://localhost:3000/static/${req.params.mac_address}.bin`,
+          file_path: `https://six-sense-mobility-iot.vercel.app/static/${req.params.mac_address}.bin`,
         });
     } else {
       res.status(404).json({ message: "product not found :(" });
