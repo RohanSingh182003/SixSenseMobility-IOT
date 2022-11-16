@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
-const router = require("./routes/productRoutes");
+const productsRouter = require("./routes/productRoutes");
+const usersRoute = require('./routes/userRoutes')
 require("dotenv").config();
 
 // middlewares
@@ -17,8 +18,6 @@ let mongoConnectionString =
 app.listen(port, () => console.log(`app is listening on port ${port}`));
 mongoose.connect(mongoConnectionString, () => console.log("DB Connected!"));
 
-app.use("/api/products", router);
-
 // initial route
 app.get("/", (req, res) => {
   res.json({
@@ -30,3 +29,9 @@ app.get("/", (req, res) => {
 // serve the upload directpory as a static folder
 const path = require("path");
 app.use("/static", express.static(path.join(__dirname, "uploads")));
+
+// routes define here 
+app.use("/api/products", productsRouter);
+
+app.use('/api/users' , usersRoute)
+
