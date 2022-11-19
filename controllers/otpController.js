@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
     from: 'rs7289579@gmail.com',
     to: req.body.email,
     subject: 'OTP Varification',
-    text: 'Your OTP for SixSenseMobility IOT is :'+ JSON.stringify(req.body.otp)
+    text: 'Your OTP for SixSenseMobility IOT is : '+ JSON.stringify(req.body.otp)
   };
   
   transporter.sendMail(mailOptions, (error, info) => {
