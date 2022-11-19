@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const productsRouter = require("./routes/productRoutes");
 const usersRoute = require('./routes/userRoutes')
+const otpRoutes = require('./routes/otpRoutes')
 require("dotenv").config();
 
 // middlewares
@@ -34,4 +35,6 @@ app.use("/static", express.static(path.join(__dirname, "uploads")));
 app.use("/api/products", productsRouter);
 
 app.use('/api/users' , usersRoute)
+
+app.use('/api/otp',otpRoutes)
 
