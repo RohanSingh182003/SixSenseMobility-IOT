@@ -4,7 +4,10 @@ const productSchema = new mongoose.Schema({
     device_type: String,
     prod_name: String,
     ip_address: String,
-    mac_address: String,
+    mac_address: {
+      type : String,
+      unique : true
+    },
     status: String,
     function: String,
     version: Number,
@@ -12,9 +15,9 @@ const productSchema = new mongoose.Schema({
   });
   
   const prodSchema = new mongoose.Schema({
-    name: {
+    email: {
       type: String,
-      require: true,
+      required: true,
     },
     isAdmin: Boolean,
     devices: [String],

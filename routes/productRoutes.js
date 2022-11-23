@@ -20,9 +20,14 @@ router.post("/device/:id", upload.single("upload_file"), productDeviceController
 router.post("/deviceType/:id", upload.single("upload_file"), productDeviceTypeController.post);
 
 
-router.put("/:id", upload.single("upload_file"), productController.put); //Here its necessary to pass the mac_address through api's because of update file 
+router.put("/device/:mac_address", upload.single("upload_file"), productDeviceController.put); //Here its necessary to pass the mac_address through api's because of update file 
 
 
 router.delete("/:id", productController.delete);
+
+router.delete("/device/:mac_address", productDeviceController.delete);
+
+router.delete("/deviceType/:id/:value", productDeviceTypeController.delete);
+
 
 module.exports = router;
