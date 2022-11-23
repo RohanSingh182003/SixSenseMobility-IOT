@@ -15,7 +15,7 @@ module.exports = {
     let _id = req.params.id;
     let member = await Product.find({ _id });
     if (member.length > 0) {
-      res.send(member);
+      res.send(member[0]);
     } else {
       res.status(404).json({ message: "no product found :(" });
     }

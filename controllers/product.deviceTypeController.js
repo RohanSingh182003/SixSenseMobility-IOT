@@ -7,7 +7,7 @@ module.exports = {
       let { devices } = req.body;
 
       let prod = await Product.find({ devices })
-      if(prod.length != 0) return res.send("device already exixts")
+      if(prod.length != 0) return res.status(400).send("device already exixts")
 
         try {
           let response = await Product.updateOne(
