@@ -25,7 +25,7 @@ router.put("/device/:mac_address", upload.single("upload_file"), productDeviceCo
 
 router.delete("/:id", productController.delete);
 
-router.delete("/device/:mac_address", productDeviceController.delete);
+router.delete("/device/:id", productDeviceController.delete);
 
 router.delete("/deviceType/:id/:value", productDeviceTypeController.delete);
 
