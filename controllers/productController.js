@@ -49,34 +49,6 @@ module.exports = {
     }
   },
 
-  postSingleDevice: async (req, res) => {
-    try {
-      let _id = req.params.id;
-      let { product } = req.body;
-      let response = await Product.updateOne(
-        { _id },
-        { $push: { product } }
-      );
-      res.send(response);
-    } catch (error) {
-      res.send(error.message);
-    }
-  },
-
-  postDeviceType : async (req,res) => {
-    try {
-      let _id = req.params.id;
-      let { devices } = req.body;
-      let response = await Product.updateOne(
-        { _id },
-        { $push: { devices } }
-      );
-      res.send(response);
-    } catch (error) {
-      res.send(error.message);
-    }
-  },
-
   put: async (req, res) => {
     let _id = req.params.id;
     let prod = await Product.find({ _id });

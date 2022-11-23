@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../middlewares/upload-file");
 const productController = require('../controllers/productController')
-
+const productDeviceTypeController = require('../controllers/product.deviceTypeController')
+const productDeviceController = require('../controllers/product.deviceController')
 
 router.get("/", productController.get);
 
@@ -14,9 +15,9 @@ router.get("/mac_address/:mac_address", productController.getProductByMacAddress
 
 router.post("/", upload.single("upload_file"), productController.post);
 
-router.post("/device/:id", upload.single("upload_file"), productController.postSingleDevice);
+router.post("/device/:id", upload.single("upload_file"), productDeviceController.post);
 
-router.post("/deviceType/:id", upload.single("upload_file"), productController.postDeviceType);
+router.post("/deviceType/:id", upload.single("upload_file"), productDeviceTypeController.post);
 
 
 router.put("/:id", upload.single("upload_file"), productController.put); //Here its necessary to pass the mac_address through api's because of update file 
