@@ -20,16 +20,17 @@ module.exports = {
 
   put: async (req, res) => {
 
-    let mac_address = req.params.mac_address;
+    let _id = req.params.id;
+    let version = req.body.version
 
-    let prod = await Product.find({"product.mac_address":mac_address})
+    let prod = await Product.find({"product._id":_id})
     if(prod.length == 0) return res.send("device doesn't exixts")
 
     try {
       let response = await Product.updateOne(
-        { "product.mac_address": mac_address },
+        {"product._id":_id},
         {
-          $set: { "product.$.status": "in-active" },
+          $set: { "product.$.version": version },
         }
       );
       res.send(response);
