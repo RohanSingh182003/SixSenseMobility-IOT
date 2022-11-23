@@ -1,11 +1,10 @@
-const fs = require('fs');
-const Products = require("../models/dashboardSchema");
+const fs = require("fs");
+const Product = require("../models/productSchema");
 
 module.exports = {
-
   get: async (req, res) => {
     try {
-      const response = await Products.find();
+      const response = await Product.find();
       res.send(response);
     } catch (error) {
       res.send(error);
@@ -14,7 +13,7 @@ module.exports = {
 
   getSingleProduct: async (req, res) => {
     let _id = req.params.id;
-    let member = await Products.find({ _id });
+    let member = await Product.find({ _id });
     if (member.length > 0) {
       res.send(member);
     } else {
@@ -24,7 +23,7 @@ module.exports = {
 
   getProductByMacAddress: async (req, res) => {
     try {
-      let prod = await Products.find({ mac_address: req.params.mac_address });
+      let prod = await Product.find({ mac_address: req.params.mac_address });
       if (prod.length > 0) {
         let version = prod[0].version;
         res.status(200).json({
@@ -40,58 +39,73 @@ module.exports = {
   },
 
   post: async (req, res) => {
-    let prod_mac_address = await Products.find({
-      mac_address: req.body.mac_address,
-    });
-    if (prod_mac_address.length > 0) {
-      res.status(500).json({
-        message:
-          "product already exists , enter a different product or mac address.",
-      });
-    } else {
-      try {
-        const ins = new Products({
-          prod_name: req.body.prod_name,
-          ip_address: req.body.ip_address,
-          mac_address: req.body.mac_address,
-          function: req.body.function,
-          version: Number.parseFloat(req.body.version),
-          last_updated: req.body.last_updated,
-        });
-        const response = await ins.save();
-        res.send(response);
-      } catch (error) {
-        res.send(error);
-      }
+    let { name, isAdmin, devices, product } = req.body;
+    try {
+      const ins = new Product({ name, isAdmin, devices, product });
+      const response = await ins.save();
+      res.send(response);
+    } catch (error) {
+      res.send(error);
+    }
+  },
+
+  postSingleDevice: async (req, res) => {
+    try {
+      let _id = req.params.id;
+      let { product } = req.body;
+      let response = await Product.updateOne(
+        { _id },
+        { $push: { product } }
+      );
+      res.send(response);
+    } catch (error) {
+      res.send(error.message);
+    }
+  },
+
+  postDeviceType : async (req,res) => {
+    try {
+      let _id = req.params.id;
+      let { devices } = req.body;
+      let response = await Product.updateOne(
+        { _id },
+        { $push: { devices } }
+      );
+      res.send(response);
+    } catch (error) {
+      res.send(error.message);
     }
   },
 
   put: async (req, res) => {
     let _id = req.params.id;
-    let prod = await Products.find({_id})
-    if(prod.length == 0){
-      res.send('Product not found :( .')
+    let prod = await Product.find({ _id });
+    if (prod.length == 0) {
+      res.send("Product not found :( .");
     }
     try {
-      let response = await Products.findByIdAndUpdate({_id},{
-        version : req.body.version,
-        last_updated : req.body.last_updated
-      })
-      res.send(response)
+      let response = await Product.findByIdAndUpdate(
+        { _id },
+        {
+          version: req.body.version,
+          last_updated: req.body.last_updated,
+        }
+      );
+      res.send(response);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   },
 
   delete: async (req, res) => {
     let id = req.params.id;
-    let response = await Products.find({ _id: id });
+    let response = await Product.find({ _id: id });
     if (response.length > 0) {
-      let fileName = response[0].mac_address
+      let fileName = response[0].mac_address;
       const filePath = `uploads/${fileName}.bin`;
       try {
-        const response = await Products.findByIdAndDelete({ _id: id });
-        fs.unlink(filePath,()=> console.log('deleted successfully.'))
+        const response = await Product.findByIdAndDelete({ _id: id });
+        fs.unlink(filePath, () => console.log("deleted successfully."));
         res.send(response);
       } catch (error) {
         res.status(404).send(error);
@@ -99,6 +113,5 @@ module.exports = {
     } else {
       res.status(404).json({ message: "No Product found!" });
     }
-  }
-
+  },
 };
