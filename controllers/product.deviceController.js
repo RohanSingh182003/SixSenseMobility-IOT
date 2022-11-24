@@ -3,25 +3,32 @@ const Product = require("../models/productSchema");
 
 module.exports = {
   post: async (req, res) => {
-    let _id = req.params.id;
-    let { product } = req.body;
-    let existing_prod = await Product.find({ $and:
-        [{"product.mac_address": product.mac_address},
-        {"product.device_type": product.device_type}]
-    });
-
-    if(existing_prod.length != 0) return res.status(400).send('product aleady exists.')
-
-    res.send(existing_prod);
-
-    let prod = await Product.find({ _id });
-    if (prod.length == 0) return res.send("device doesn't exixts");
-
     try {
-      let response = await Product.updateOne({ _id }, { $push: { product } });
-      res.send(response);
+      let _id = req.params.id;
+      let { product } = req.body;
+      let existing_prod = await Product.find({
+        $and: [
+          { "product.mac_address": product.mac_address },
+          { "product.device_type": product.device_type },
+        ],
+      });
+
+      if (existing_prod.length != 0)
+        return res.status(400).send("product aleady exists.");
+
+      res.send(existing_prod);
+
+      let prod = await Product.find({ _id });
+      if (prod.length == 0) return res.send("device doesn't exixts");
+
+      try {
+        let response = await Product.updateOne({ _id }, { $push: { product } });
+        res.send(response);
+      } catch (error) {
+        console.log(error.message);
+      }
     } catch (error) {
-      res.send(error.message);
+      console.log(error.message);
     }
   },
 
