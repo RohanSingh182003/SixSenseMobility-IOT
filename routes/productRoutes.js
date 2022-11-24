@@ -26,7 +26,10 @@ router.delete("/:id", productController.delete);
 
 router.delete("/device/:id", productDeviceController.delete);
 
+router.delete("/device/:id/:device_type", productDeviceController.deleteProducts);
+
 router.delete("/deviceType/:id/:value", productDeviceTypeController.delete);
+
 
 
 module.exports = router;
