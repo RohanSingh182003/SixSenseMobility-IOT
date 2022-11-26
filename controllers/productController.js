@@ -7,7 +7,7 @@ module.exports = {
       const response = await Product.find();
       res.send(response);
     } catch (error) {
-      res.send(error);
+      console.log(error.message);
     }
   },
 
