@@ -6,7 +6,7 @@ module.exports = {
     try {
       let _id = req.params.id;
       let { product } = req.body;
-      let existing_prod = await Product.find({ $and: [{_id},{"product.mac_address": product.mac_address},{"product.device_type": product.device_type}]});
+      let existing_prod = await Product.find({ $and: [{_id},{"product.mac_address": product.mac_address}]});
       if (existing_prod.length != 0)
         return res.status(400).send("product aleady exists.");
 
@@ -26,7 +26,7 @@ module.exports = {
 
   put: async (req, res) => {
     let _id = req.params.id;
-    let version = req.body.version;
+    let version = req.body.product.version;
 
     let prod = await Product.find({ "product._id": _id });
     if (prod.length == 0) return res.send("device doesn't exixts");

@@ -12,7 +12,7 @@ router.get("/mac_address/:mac_address", productController.getProductByMacAddress
 
 router.post("/", productController.post);
 router.post("/device/:id", upload.single("upload_file"), productDeviceController.post);
-router.post("/deviceType/:id", upload.single("upload_file"), productDeviceTypeController.post);
+router.post("/deviceType/:id", productDeviceTypeController.post);
 
 router.put("/device/:id", upload.single("upload_file"), productDeviceController.put); //Here its necessary to pass the mac_address through api's because of update file 
 
