@@ -3,11 +3,10 @@ const Product = require("../models/productSchema");
 
 module.exports = {
   post: async (req, res) => {
-    console.log(req.body)
     try {
       let _id = req.params.id;
       let { product } = req.body;
-      let existing_prod = await Product.find({"product.mac_address": product.mac_address});
+      let existing_prod = await Product.find({ $and: [{_id},{"product.mac_address": product.mac_address},{"product.device_type": product.device_type}]});
       if (existing_prod.length != 0)
         return res.status(400).send("product aleady exists.");
 

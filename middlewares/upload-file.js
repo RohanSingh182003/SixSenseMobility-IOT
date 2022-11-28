@@ -1,10 +1,16 @@
 const multer = require('multer')
 const path = require('path')
+const fs = require('fs');
 
 const storage = multer.diskStorage({
-    destination: 'uploads/',
+    destination:  (req, file, cb) => {
+        const dir = `./uploads/${req.body.email}`;
+        if (!fs.existsSync(dir)){
+            fs.mkdirSync(dir);
+        }
+        cb(null, `uploads/${req.body.email}/`)
+      },
     filename: (req,file,cb) => {
-        console.log(file)
         return cb(null, `${req.body.product.mac_address}${path.extname(file.originalname)}`)
     }
 })
