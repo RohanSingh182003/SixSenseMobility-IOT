@@ -64,15 +64,25 @@ module.exports = {
   },
 
   deleteProducts: async (req, res) => {
-    let prod = await Product.find({ _id: req.params.id });
-
+    let _id = req.params.id
+    let device_type = req.params.device_type
+    let prod = await Product.findOne({_id })
+    let filter_prod = prod.product.filter(item => item.device_type === device_type)
+    let del_prod_mac_address = []
+    filter_prod.forEach(element => {
+      del_prod_mac_address.push(element.mac_address)
+    });
     if (prod.length == 0) return res.send("device doesn't exixts");
 
     try {
       let response = await Product.updateOne(
-        { _id: req.params.id },
-        { $pull: { product: { device_type: req.params.device_type } } }
+        { _id },
+        { $pull: { product: { device_type } } }
       );
+      del_prod_mac_address.forEach(element => {    
+        const filePath = `uploads/${prod.email}/${element}.bin`;
+        fs.unlink(filePath, () => console.log("deleted successfully."));
+      });
       res.send(response);
     } catch (error) {
       res.send(error.message);
