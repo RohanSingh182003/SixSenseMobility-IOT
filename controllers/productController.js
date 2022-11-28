@@ -22,10 +22,10 @@ module.exports = {
   },
 
   getProductByMacAddress: async (req, res) => {
+    try {
     let email = req.query.email
     let mac_address = req.params.mac_address
     if(!email) return res.status(400).send('query email is mendetory! its like ?email=<emai> at the end of url.')
-    try {
       let prod = await Product.findOne({ email });
       let filter_prod = prod.product.find(item => item.mac_address === mac_address)
       if (prod) {
