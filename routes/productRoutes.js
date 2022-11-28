@@ -10,7 +10,7 @@ router.get("/:id", productController.getSingleProduct);
 router.get("/mac_address/:mac_address", productController.getProductByMacAddress); // Get mac_adress and send the version of the corresponding product.
 
 
-router.post("/", upload.single("upload_file"), productController.post);
+router.post("/", productController.post);
 router.post("/device/:id", upload.single("upload_file"), productDeviceController.post);
 router.post("/deviceType/:id", upload.single("upload_file"), productDeviceTypeController.post);
 

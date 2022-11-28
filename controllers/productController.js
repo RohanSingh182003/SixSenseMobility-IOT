@@ -48,27 +48,7 @@ module.exports = {
       res.send(error);
     }
   },
-
-  // put: async (req, res) => {
-  //   let _id = req.params.id;
-  //   let prod = await Product.find({ _id });
-  //   if (prod.length == 0) {
-  //     res.send("Product not found :( .");
-  //   }
-  //   try {
-  //     let response = await Product.findByIdAndUpdate(
-  //       { _id },
-  //       {
-  //         version: req.body.version,
-  //         last_updated: req.body.last_updated,
-  //       }
-  //     );
-  //     res.send(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
-
+  
   delete: async (req, res) => {
     let id = req.params.id;
     let response = await Product.find({ _id: id });
