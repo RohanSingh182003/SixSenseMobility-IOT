@@ -46,15 +46,17 @@ module.exports = {
 
   delete: async (req, res) => {
     let _id = req.params.id;
-
+    let email = req.query.email
+    let mac_address = req.query.mac_address
     let prod = await Product.find({ "product._id": _id });
     if (prod.length == 0) return res.send("device doesn't exixts");
-
+    const filePath = `uploads/${email}/${mac_address}.bin`;
     try {
       let response = await Product.updateOne(
         { "product._id": _id },
         { $pull: { product: { _id } } }
       );
+      fs.unlink(filePath, () => console.log("deleted successfully."));
       res.send(response);
     } catch (error) {
       res.send(error.message);
