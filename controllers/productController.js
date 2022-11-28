@@ -22,13 +22,17 @@ module.exports = {
   },
 
   getProductByMacAddress: async (req, res) => {
+    let email = req.query.email
+    let mac_address = req.params.mac_address
+    if(!email) return res.status(400).send('query email is mendetory! its like ?email=<emai> at the end of url.')
     try {
-      let prod = await Product.find({ mac_address: req.params.mac_address });
-      if (prod.length > 0) {
-        let version = prod[0].product.version;
+      let prod = await Product.findOne({ email });
+      let filter_prod = prod.product.find(item => item.mac_address === mac_address)
+      if (prod) {
+        let version = filter_prod.version;
         res.status(200).json({
           version,
-          file_path: `https://six-sense-mobility-iot.vercel.app/static/${req.params.mac_address}.bin`,
+          file_path: `http://localhost:3000/static/${email}/${req.params.mac_address}.bin`,
         });
       } else {
         res.status(404).json({ message: "product not found :(" });
