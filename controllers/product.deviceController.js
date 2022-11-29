@@ -6,16 +6,15 @@ module.exports = {
     try {
       let _id = req.params.id;
       let { product } = req.body;
-      let existing_prod = await Product.find({
+      let existing_prod = await Product.findOne({
         $and: [{ _id }, { "product.mac_address": product.mac_address }],
       });
-      if (existing_prod.length != 0)
-      return res.status(400).send("product aleady exists.");
+      if (existing_prod) return res.status(400).send("product aleady exists.");
       
-      let prod = await Product.find({ _id });
-      if(!(prod.email === req.product.email)) return res.status(401).send('you are not allowed to access')
-      if (prod.length == 0) return res.send("device doesn't exixts");
-
+      let prod = await Product.findOne({ _id });
+      if (!prod) return res.send("device doesn't exixts");
+      if (!(prod.email === req.product.email))
+      return res.status(401).send("you are not allowed to access");
       try {
         let response = await Product.updateOne({ _id }, { $push: { product } });
         res.send(response);
@@ -31,9 +30,10 @@ module.exports = {
     let _id = req.params.id;
     let version = req.body.product.version;
 
-    let prod = await Product.find({ "product._id": _id });
-    if(!(prod.email === req.product.email)) return res.status(401).send('you are not allowed to access')
-    if (prod.length == 0) return res.send("device doesn't exixts");
+    let prod = await Product.findOne({ "product._id": _id });
+    if (!(prod.email === req.product.email))
+      return res.status(401).send("you are not allowed to access");
+    if (!prod) return res.status(400).send("device doesn't exixts");
 
     try {
       let response = await Product.updateOne(
@@ -51,9 +51,10 @@ module.exports = {
   delete: async (req, res) => {
     let _id = req.params.id;
     let prod = await Product.findOne({ "product._id": _id });
-    if(!(prod.email === req.product.email)) return res.status(401).send('you are not allowed to access')
+    if (!(prod.email === req.product.email))
+      return res.status(401).send("you are not allowed to access");
     let device = prod.product.find((ele) => ele._id.toString() === _id);
-    if (prod.length == 0) return res.send("device doesn't exixts");
+    if (!prod) return res.status(400).send("device doesn't exixts");
     const filePath = `uploads/${prod.email}/${device.mac_address}.bin`;
     try {
       let response = await Product.updateOne(
@@ -71,7 +72,8 @@ module.exports = {
     let _id = req.params.id;
     let device_type = req.params.device_type;
     let prod = await Product.findOne({ _id });
-    if(!(prod.email === req.product.email)) return res.status(401).send('you are not allowed to access')
+    if (!(prod.email === req.product.email))
+      return res.status(401).send("you are not allowed to access");
     let filter_prod = prod.product.filter(
       (item) => item.device_type === device_type
     );
@@ -79,7 +81,7 @@ module.exports = {
     filter_prod.forEach((element) => {
       del_prod_mac_address.push(element.mac_address);
     });
-    if (prod.length == 0) return res.send("device doesn't exixts");
+    if (!prod) return res.send("device doesn't exixts");
 
     try {
       let response = await Product.updateOne(

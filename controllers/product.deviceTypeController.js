@@ -7,7 +7,6 @@ module.exports = {
     
     let prod = await Product.find({ $and: [{ _id, devices }] });
     let myDevice = await Product.findOne({_id})
-    console.log(myDevice)
     if(!(myDevice.email === req.product.email)) return res.status(401).send('you are not allowed to access')
     if (prod.length != 0) return res.status(400).send("device already exixts");
 
