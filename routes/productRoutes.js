@@ -12,16 +12,16 @@ router.get("/mac_address/:mac_address",authentication, productController.getProd
 
 
 router.post("/", productController.post);
-router.post("/device/:id", upload.single("upload_file"), productDeviceController.post);
-router.post("/deviceType/:id", productDeviceTypeController.post);
+router.post("/device/:id",authentication, upload.single("upload_file"), productDeviceController.post);
+router.post("/deviceType/:id",authentication, productDeviceTypeController.post);
 
-router.put("/device/:id", upload.single("upload_file"), productDeviceController.put); //Here its necessary to pass the mac_address through api's because of update file 
+router.put("/device/:id",authentication, upload.single("upload_file"), productDeviceController.put); //Here its necessary to pass the mac_address through api's because of update file 
 
 
 router.delete("/:id",authentication, productController.delete);
-router.delete("/device/:id", productDeviceController.delete);
-router.delete("/device/:id/:device_type", productDeviceController.deleteProducts);
-router.delete("/deviceType/:id/:value", productDeviceTypeController.delete);
+router.delete("/device/:id",authentication, productDeviceController.delete);
+router.delete("/device/:id/:device_type",authentication, productDeviceController.deleteProducts);
+router.delete("/deviceType/:id/:value",authentication, productDeviceTypeController.delete);
 
 
 
