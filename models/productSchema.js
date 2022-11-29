@@ -20,6 +20,7 @@ const productSchema = new mongoose.Schema({
       required: true,
     },
     isAdmin: Boolean,
+    token: String,
     devices: [String],
     product: [productSchema],
   });

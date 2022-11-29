@@ -23,11 +23,18 @@ module.exports = {
 
   getProductByMacAddress: async (req, res) => {
     try {
-    let email = req.query.email
-    let mac_address = req.params.mac_address
-    if(!email) return res.status(400).send('query email is mendetory! its like ?email=<emai> at the end of url.')
+      let email = req.query.email;
+      let mac_address = req.params.mac_address;
+      if (!email)
+        return res
+          .status(400)
+          .send(
+            "query email is mendetory! its like ?email=<emai> at the end of url."
+          );
       let prod = await Product.findOne({ email });
-      let filter_prod = prod.product.find(item => item.mac_address === mac_address)
+      let filter_prod = prod.product.find(
+        (item) => item.mac_address === mac_address
+      );
       if (prod) {
         let version = filter_prod.version;
         res.status(200).json({
@@ -44,15 +51,19 @@ module.exports = {
 
   post: async (req, res) => {
     let { email, isAdmin, devices, product } = req.body;
+    let token = jwt.sign(
+      { email, isAdmin, devices, product },
+      "SixSenseMobility"
+    );
     try {
-      const ins = new Product({ email, isAdmin, devices, product });
+      const ins = new Product({ email, isAdmin, devices, product, token });
       const response = await ins.save();
-      res.send(response);
+      res.send({ response, token });
     } catch (error) {
       res.send(error);
     }
   },
-  
+
   delete: async (req, res) => {
     let id = req.params.id;
     let response = await Product.find({ _id: id });
