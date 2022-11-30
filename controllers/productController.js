@@ -55,13 +55,14 @@ module.exports = {
 
   post: async (req, res) => {
     let { email, isAdmin, devices, product } = req.body;
+    let existing_prod = await Product.findOne({email})
+    if(existing_prod) return res.send('product already exists!')
     let token = jwt.sign(
       { email, isAdmin, devices, product },
       "SixSenseMobility"
     );
     try {
-      const ins = new Product({ email, isAdmin, devices, product, token });
-      const response = await ins.save();
+      const response = await Product.create({ email, isAdmin, devices, product, token });
       res.send(response);
     } catch (error) {
       res.send(error);
