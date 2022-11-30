@@ -6,15 +6,13 @@ module.exports = {
     try {
       let _id = req.params.id;
       let { product } = req.body;
-      let existing_prod = await Product.findOne({
-        $and: [{ _id }, { "product.mac_address": product.mac_address }],
-      });
+      let existing_prod = await Product.findOne({"product.mac_address": product.mac_address });
       if (existing_prod) return res.status(400).send("product aleady exists.");
       
       let prod = await Product.findOne({ _id });
       if (!prod) return res.send("device doesn't exixts");
       if (!(prod.email === req.product.email))
-      return res.status(401).send("you are not allowed to access");
+      return res.status(403).send("you are not authorized");
       try {
         let response = await Product.updateOne({ _id }, { $push: { product } });
         res.send(response);
@@ -55,7 +53,7 @@ module.exports = {
       return res.status(401).send("you are not allowed to access");
     let device = prod.product.find((ele) => ele._id.toString() === _id);
     if (!prod) return res.status(400).send("device doesn't exixts");
-    const filePath = `uploads/${prod.email}/${device.mac_address}.bin`;
+    const filePath = `uploads/${device.mac_address}.bin`;
     try {
       let response = await Product.updateOne(
         { "product._id": _id },
@@ -89,7 +87,7 @@ module.exports = {
         { $pull: { product: { device_type } } }
       );
       del_prod_mac_address.forEach((element) => {
-        const filePath = `uploads/${prod.email}/${element}.bin`;
+        const filePath = `uploads/${element}.bin`;
         fs.unlink(filePath, () => console.log("deleted successfully."));
       });
       res.send(response);
