@@ -67,10 +67,16 @@ module.exports = {
     let response = await Product.findOne({ _id: id });
     if(!response) return res.status(400).send('product not found.')
     if(!(response.email === req.product.email || req.product.isAdmin)) return res.status(401).send('you are not allowed to access')
-      const filePath = `uploads/${response.email}`;
-      try {
-        const response = await Product.findByIdAndDelete({ _id: id });
+    let mac_addresses = []
+    response.product.length > 0 && response.product.forEach(ele => {
+      mac_addresses.push(ele.mac_address)
+    });
+    try {
+      const response = await Product.findByIdAndDelete({ _id: id });
+      mac_addresses.length > 0 && mac_addresses.forEach(async ele => {
+        const filePath = `uploads/${ele}.bin`;
         fs.unlink(filePath, () => console.log("deleted successfully."));
+      });
         res.send(response);
       } catch (error) {
         res.status(404).send(error);
